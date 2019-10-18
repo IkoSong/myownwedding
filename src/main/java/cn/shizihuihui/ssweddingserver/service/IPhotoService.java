@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author song
- * @since 2019-10-14
+ * @since 2019-10-16
  */
 public interface IPhotoService extends IService<Photo> {
 

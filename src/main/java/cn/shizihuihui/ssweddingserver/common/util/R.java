@@ -46,4 +46,14 @@ public class R<T> implements Serializable {
         this.msg = e.getMessage();
         this.code = CommonConstants.FAIL;
     }
+    public R success(T data){
+        R<T> r = new R<>();
+        r.data = data;
+        r.code = CommonConstants.SUCCESS;
+        return r;
+    }
+    public R(Integer code,String msg){
+        this.code = code;
+        this.msg = msg;
+    }
 }

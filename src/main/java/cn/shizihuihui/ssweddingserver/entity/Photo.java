@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author song
- * @since 2019-10-14
+ * @since 2019-10-16
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -36,6 +36,9 @@ public class Photo implements Serializable {
 
     @ApiModelProperty(value = "照片URL")
     private String url;
+
+    @ApiModelProperty(value = "展示顺序")
+    private Integer showIndex;
 
 
 }

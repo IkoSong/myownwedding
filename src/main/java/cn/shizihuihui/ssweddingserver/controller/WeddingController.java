@@ -1,18 +1,22 @@
 package cn.shizihuihui.ssweddingserver.controller;
 
 
+import cn.shizihuihui.ssweddingserver.common.constant.CommonConstants;
+import cn.shizihuihui.ssweddingserver.entity.Bless;
+import cn.shizihuihui.ssweddingserver.entity.BlessVO;
 import cn.shizihuihui.ssweddingserver.entity.Photo;
 import cn.shizihuihui.ssweddingserver.service.IBlessService;
 import cn.shizihuihui.ssweddingserver.service.IGuestService;
 import cn.shizihuihui.ssweddingserver.service.IPhotoService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.api.R;
+import cn.shizihuihui.ssweddingserver.common.util.R;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
-
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,6 +29,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/wedding")
+@Slf4j
 public class WeddingController{
     @Autowired
     private IBlessService blessService;
@@ -36,12 +41,27 @@ public class WeddingController{
 
     @GetMapping("/getBless")
     public R getBless(){
-        return R.ok(blessService.list(new QueryWrapper<>()));
+        return new R<>(blessService.list(new QueryWrapper<>()));
+    }
+
+    @PostMapping("/sendBless")
+    public R sendBless(@RequestBody BlessVO blessVO){
+        try {
+            String reMsg = blessService.saveBlessAndGuest(blessVO);
+            List<Bless> listData = blessService.list(new QueryWrapper<>());
+            return new R<>(CommonConstants.SUCCESS,reMsg,listData);
+        } catch (Exception e) {
+            log.error("祝福信息保存错误+"+e.getMessage());
+            return new R(CommonConstants.FAIL,"系统错误！");
+        }
     }
 
     @GetMapping("/getPhotos")
     public R<List<Photo>> getPhotos(){
-        return R.ok(photoServicel.list(new QueryWrapper<>()));
+        //根据index排序
+        List<Photo> photoList = photoServicel.list(new QueryWrapper<>());
+        photoList.sort(Comparator.comparingInt(Photo::getShowIndex));
+        return new R<>(photoList);
     }
 
 }
