@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author song
- * @since 2019-10-18
+ * @since 2019-10-20
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -40,7 +40,17 @@ public class Guest implements Serializable {
     @ApiModelProperty(value = "来客人数")
     private Integer num;
 
+    @ApiModelProperty(value = "微信头像")
+    private String face;
+
+    @ApiModelProperty(value = "微信名称")
+    private String nickname;
+
+    @ApiModelProperty(value = "创建时间")
     private String createTime;
+
+    @ApiModelProperty(value = "更新时间")
     private String updateTime;
+
 
 }

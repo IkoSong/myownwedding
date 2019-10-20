@@ -49,7 +49,7 @@ public class BlessServiceImpl extends ServiceImpl<BlessMapper, Bless> implements
            BeanUtils.copyProperties(blessVO,bless);
            bless.setCreateTime(formatTime);
            this.save(bless);
-           return "收到你的祝福啦！感谢！";
+           return "发送成功，感谢您的祝福";
         }else{
             //出席信息
             //首先查询是否已有出席信息
@@ -68,6 +68,8 @@ public class BlessServiceImpl extends ServiceImpl<BlessMapper, Bless> implements
                 guest.setNum(blessVO.getNum());
                 guest.setRealName(blessVO.getRealName());
                 guest.setTel(blessVO.getTel());
+                guest.setFace(blessVO.getFace());
+                guest.setNickname(blessVO.getNickname());
                 guest.setCreateTime(formatTime);
                 guestMapper.insert(guest);
             }
@@ -78,9 +80,9 @@ public class BlessServiceImpl extends ServiceImpl<BlessMapper, Bless> implements
                 this.save(bless);
             }
             if(isUpdate){
-                return "您的信息更新成功！期待您的到来";
+                return "您的信息更新成功,期待您的到来";
             }else{
-                return "提交成功！期待您的到来";
+                return "提交成功,期待您的到来";
             }
         }
     }
