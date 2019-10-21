@@ -10,6 +10,7 @@ import cn.shizihuihui.ssweddingserver.mapper.GuestMapper;
 import cn.shizihuihui.ssweddingserver.service.IBlessService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import java.util.Date;
  * @since 2019-10-16
  */
 @Service
+@Slf4j
 public class BlessServiceImpl extends ServiceImpl<BlessMapper, Bless> implements IBlessService {
     @Autowired
     private GuestMapper guestMapper;
@@ -35,6 +37,7 @@ public class BlessServiceImpl extends ServiceImpl<BlessMapper, Bless> implements
     @Override
     @Transactional
     public String saveBlessAndGuest(BlessVO blessVO) {
+        log.info("祝福信息保存:"+blessVO.toString());
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formatTime = sdf.format(new Date());
         if(!blessVO.getIsCome()){
