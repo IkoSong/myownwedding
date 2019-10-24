@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author song
- * @since 2019-10-16
+ * @since 2019-10-24
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -30,6 +30,9 @@ public class Bless implements Serializable {
     @ApiModelProperty(value = "祝福表id")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
+
+    @ApiModelProperty(value = "用户id")
+    private Integer userId;
 
     @ApiModelProperty(value = "微信头像")
     private String face;

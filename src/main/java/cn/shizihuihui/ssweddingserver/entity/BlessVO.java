@@ -15,4 +15,8 @@ public class BlessVO extends Bless {
     private Integer num;
 
     private Boolean isCome;
+
+    private String openId;
+
+    private String formId;
 }

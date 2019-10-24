@@ -29,7 +29,7 @@ public class MysqlGenerator {
     private static final String driverName = "com.mysql.jdbc.Driver";
     private static final String userName = "root";
     private static final String password = "Sxy950103.";
-    private static final String table_name = "ss_guest";
+    private static final String table_name = "ss_user";
 
 
     public static void main(String[] args){
