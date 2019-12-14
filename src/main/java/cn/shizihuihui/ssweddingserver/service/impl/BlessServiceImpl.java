@@ -48,13 +48,39 @@ public class BlessServiceImpl extends ServiceImpl<BlessMapper, Bless> implements
     @Transactional
     public String saveBlessAndGuest(BlessVO blessVO) {
         log.info("祝福信息保存:"+blessVO.toString());
+        String accessToken = null;
+        //内容安全校验
+        if(StringUtils.isNotBlank(blessVO.getWords())){
+            String tokenParam ="grant_type=client_credential&appid=" + wechatAppId + "&secret=" + wechatSecretKey;
+            String res = HttpRequest.sendGet("https://api.weixin.qq.com/cgi-bin/token", tokenParam);
+            JSONObject jsonObject = JSONObject.parseObject(res);
+            accessToken = jsonObject.getString("access_token");
+
+            JSONObject msgObj = new JSONObject();
+            msgObj.put("content",blessVO.getWords());
+            String result = HttpRequest.sendPost("https://api.weixin.qq.com/wxa/msg_sec_check?access_token=" + accessToken, msgObj.toJSONString());
+            JSONObject msgCheckRes = JSONObject.parseObject(result);
+            if(msgCheckRes.getInteger("errcode")!=0 || !msgCheckRes.getString("errmsg").equals("ok")){
+                return "含有违法违规内容,发送失败";
+            }
+        }
+
+
+
         QueryWrapper<User> userQw = new QueryWrapper<>();
         userQw.eq("openid",blessVO.getOpenId());
         User user = userMapper.selectOne(userQw);
         if(user==null){
-            log.error("查询不到openId："+blessVO.getOpenId()+"的用户信息");
-            throw new RuntimeException("登录信息查询错误，请重新登录");
+            user = new User();
+            //登录信息保存错误，进行补偿 保存
+            user.setOpenid(blessVO.getOpenId());
+            user.setNickname(blessVO.getNickname());
+            user.setCtime(new Date());
+            userMapper.insert(user);
         }
+
+
+
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formatTime = sdf.format(new Date());
         if(!blessVO.getIsCome()){
@@ -103,9 +129,10 @@ public class BlessServiceImpl extends ServiceImpl<BlessMapper, Bless> implements
                 Bless bless = new Bless();
                 BeanUtils.copyProperties(blessVO,bless);
                 bless.setCreateTime(formatTime);
+                bless.setUserId(user.getId());
                 this.save(bless);
             }
-            this.sendMsg(blessVO,isUpdate);
+            this.sendMsg(blessVO,isUpdate,accessToken);
             if(isUpdate){
                 //发送模板请求
                 return "您的信息更新成功,期待您的到来";
@@ -136,13 +163,16 @@ public class BlessServiceImpl extends ServiceImpl<BlessMapper, Bless> implements
 //  },
 //  "emphasis_keyword": "keyword1.DATA"
 //}
-    private void sendMsg(BlessVO blessVO,Boolean isUpdate){
+    private void sendMsg(BlessVO blessVO,Boolean isUpdate,String accessToken){
         try {
             //获取access_token
-            String tokenParam ="grant_type=client_credential&appid=" + wechatAppId + "&secret=" + wechatSecretKey;
-            String res = HttpRequest.sendGet("https://api.weixin.qq.com/cgi-bin/token", tokenParam);
-            JSONObject jsonObject = JSONObject.parseObject(res);
-            String accessToken = jsonObject.getString("access_token");
+            if(accessToken==null){
+                //如果已经取到则不需要再次取
+                String tokenParam ="grant_type=client_credential&appid=" + wechatAppId + "&secret=" + wechatSecretKey;
+                String res = HttpRequest.sendGet("https://api.weixin.qq.com/cgi-bin/token", tokenParam);
+                JSONObject jsonObject = JSONObject.parseObject(res);
+                accessToken = jsonObject.getString("access_token");
+            }
             JSONObject params = new JSONObject();
             params.put("touser",blessVO.getOpenId());
             params.put("template_id","57WPG6l8ujS8LgdnHxEmcpIfoM2rwxDYBJI_1SuYx7k");
@@ -150,7 +180,7 @@ public class BlessServiceImpl extends ServiceImpl<BlessMapper, Bless> implements
             params.put("form_id",blessVO.getFormId());
             JSONObject msgData = new JSONObject();
             TemplateData templateData1 = new TemplateData();
-            if(isUpdate){
+            if(!isUpdate){
                 templateData1.setValue("新增出席信息");
             }else{
                 templateData1.setValue("更新出席信息");
@@ -160,7 +190,7 @@ public class BlessServiceImpl extends ServiceImpl<BlessMapper, Bless> implements
             TemplateData templateData3 = new TemplateData();
             templateData3.setValue(blessVO.getTel().toString());
             TemplateData templateData4 = new TemplateData();
-            templateData4.setValue(blessVO.getNum().toString());
+            templateData4.setValue(blessVO.getNum());
             TemplateData templateData5 = new TemplateData();
             String formatDateTime = DateUtil.formatDateTime(new Date());
             templateData5.setValue(formatDateTime);

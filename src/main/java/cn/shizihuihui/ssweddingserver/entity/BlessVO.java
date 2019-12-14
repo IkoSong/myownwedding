@@ -12,7 +12,7 @@ public class BlessVO extends Bless {
     private Long tel;
 
     @ApiModelProperty(value = "来客人数")
-    private Integer num;
+    private String num;
 
     private Boolean isCome;
 

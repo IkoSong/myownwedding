@@ -41,7 +41,7 @@ public class Guest implements Serializable {
     private Long tel;
 
     @ApiModelProperty(value = "来客人数")
-    private Integer num;
+    private String num;
 
     @ApiModelProperty(value = "微信头像")
     private String face;
