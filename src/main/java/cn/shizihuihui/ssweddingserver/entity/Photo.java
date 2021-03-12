@@ -12,18 +12,18 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 祝福语表
+ * 照片表
  * </p>
  *
  * @author song
- * @since 2019-10-24
+ * @since 2019-10-16
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("ss_bless")
-@ApiModel(value="Bless对象", description="祝福语表")
-public class Bless implements Serializable {
+@TableName("ss_photo")
+@ApiModel(value="Photo对象", description="照片表")
+public class Photo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,20 +31,14 @@ public class Bless implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "用户id")
-    private Integer userId;
+    @ApiModelProperty(value = "照片名称")
+    private String name;
 
-    @ApiModelProperty(value = "微信头像")
-    private String face;
+    @ApiModelProperty(value = "照片URL")
+    private String url;
 
-    @ApiModelProperty(value = "微信名称")
-    private String nickname;
-
-    @ApiModelProperty(value = "祝福内容")
-    private String words;
-
-    @ApiModelProperty(value = "创建时间")
-    private String createTime;
+    @ApiModelProperty(value = "展示顺序")
+    private Integer showIndex;
 
 
 }

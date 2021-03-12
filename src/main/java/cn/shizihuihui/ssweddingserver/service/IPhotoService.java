@@ -1,16 +1,16 @@
 package cn.shizihuihui.ssweddingserver.service;
 
-import cn.shizihuihui.ssweddingserver.entity.Guest;
+import cn.shizihuihui.ssweddingserver.entity.Photo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- *  服务类
+ * 照片表 服务类
  * </p>
  *
  * @author song
- * @since 2019-10-24
+ * @since 2019-10-16
  */
-public interface IGuestService extends IService<Guest> {
+public interface IPhotoService extends IService<Photo> {
 
 }

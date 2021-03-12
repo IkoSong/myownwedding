@@ -25,11 +25,11 @@ public class MysqlGenerator {
     private static final String TABLE_PREFIX = "ss_";
 
     //数据库
-    private static final String url = "jdbc:mysql://122.51.5.55:3306/newwedding?useUnicode=true&useSSL=false&characterEncoding=utf8";
+    private static final String url = "jdbc:mysql://122.51.5.55:3306/sswedding?useUnicode=true&useSSL=false&characterEncoding=utf8";
     private static final String driverName = "com.mysql.jdbc.Driver";
     private static final String userName = "root";
     private static final String password = "Sxy950103.";
-    private static final String table_name = "ss_guest";
+    private static final String table_name = "ss_user";
 
 
     public static void main(String[] args){

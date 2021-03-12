@@ -12,39 +12,33 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 祝福语表
+ * 小程序配置表
  * </p>
  *
  * @author song
- * @since 2019-10-24
+ * @since 2019-10-19
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("ss_bless")
-@ApiModel(value="Bless对象", description="祝福语表")
-public class Bless implements Serializable {
+@TableName("ss_config")
+@ApiModel(value="Config对象", description="小程序配置表")
+public class Config implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "祝福表id")
+    @ApiModelProperty(value = "配置表id")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "用户id")
-    private Integer userId;
+    @ApiModelProperty(value = "配置类型")
+    private Integer configType;
 
-    @ApiModelProperty(value = "微信头像")
-    private String face;
+    @ApiModelProperty(value = "配置键")
+    private String configKey;
 
-    @ApiModelProperty(value = "微信名称")
-    private String nickname;
-
-    @ApiModelProperty(value = "祝福内容")
-    private String words;
-
-    @ApiModelProperty(value = "创建时间")
-    private String createTime;
+    @ApiModelProperty(value = "配置键配置值")
+    private String configValue;
 
 
 }
